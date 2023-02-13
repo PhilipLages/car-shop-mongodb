@@ -1,3 +1,5 @@
+import { isValidObjectId } from 'mongoose';
+
 import Car from '../Domains/Car';
 import ICar from '../Interfaces/ICar';
 import CarODM from '../Models/CarODM';
@@ -5,19 +7,33 @@ import CarODM from '../Models/CarODM';
 export default class CarService {
   private _model = new CarODM();
 
-  private createCarDomain(car: ICar): Car {
-    return new Car(car);
+  private createCarDomain(car: ICar | null): Car | null {
+    if (car) {
+      return new Car(car);
+    }
+    return null;
   }
 
-  public async create(car: ICar): Promise<Car> {
+  public async create(car: ICar) {
     const newCar = await this._model.create(car);
-    return this.createCarDomain(newCar);
+  
+    return { status: 201, data: this.createCarDomain(newCar) };
   }
 
-  public async getAll(): Promise<Car[]> {
-    const cars = await this._model.getAll();
-    const carDomains = cars.map((car) => this.createCarDomain(car));
+  public async findAll() {
+    const cars = await this._model.findAll();
+    const data = cars.map((car) => this.createCarDomain(car));
 
-    return carDomains;
+    return { status: 200, data };
+  }
+
+  public async findById(id: string) {
+    if (!isValidObjectId(id)) return { status: 422, data: { message: 'Invalid mongo id' } };
+
+    const car = await this._model.findById(id);
+
+    if (!car) return { status: 404, data: { message: 'Car not found' } };
+
+    return { status: 200, data: this.createCarDomain(car) };
   }
 }
