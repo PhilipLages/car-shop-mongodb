@@ -11,7 +11,6 @@ export default class CarService {
 
   public async create(car: ICar): Promise<Car> {
     const newCar = await this._model.create(car);
-    console.log(this.createCarDomain(newCar));
     return this.createCarDomain(newCar);
   }
 }
