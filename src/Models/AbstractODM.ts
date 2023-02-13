@@ -1,10 +1,11 @@
 import { 
-  isValidObjectId, 
+  // isValidObjectId, 
   model, 
   Model, 
   models, 
   Schema, 
-  UpdateQuery } from 'mongoose';
+  // UpdateQuery 
+} from 'mongoose';
 
 export default class AbstractODM<T> {
   protected model: Model<T>;
@@ -21,13 +22,13 @@ export default class AbstractODM<T> {
     return this.model.create({ ...obj });
   }
 
-  public async update(id: string, obj: Partial<T>): Promise<T | null> {
-    if (!isValidObjectId(id)) throw Error('Invalid Mongo id');
+  // public async update(id: string, obj: Partial<T>): Promise<T | null> {
+  //   if (!isValidObjectId(id)) throw Error('Invalid Mongo id');
 
-    return this.model.findByIdAndUpdate(
-      { _id: id },
-      { ...obj } as UpdateQuery<T>,
-      { new: true },
-    );
-  }
+  //   return this.model.findByIdAndUpdate(
+  //     { _id: id },
+  //     { ...obj } as UpdateQuery<T>,
+  //     { new: true },
+  //   );
+  // }
 } 
