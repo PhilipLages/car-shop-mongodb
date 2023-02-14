@@ -3,7 +3,7 @@ import {
   Model, 
   models, 
   Schema, 
-  // UpdateQuery 
+  UpdateQuery, 
 } from 'mongoose';
 
 export default class AbstractODM<T> {
@@ -29,13 +29,11 @@ export default class AbstractODM<T> {
     return this.model.findById(id);
   }
 
-  // public async update(id: string, obj: Partial<T>): Promise<T | null> {
-  //   if (!isValidObjectId(id)) throw Error('Invalid Mongo id');
-
-  //   return this.model.findByIdAndUpdate(
-  //     { _id: id },
-  //     { ...obj } as UpdateQuery<T>,
-  //     { new: true },
-  //   );
-  // }
+  public async update(id: string, obj: Partial<T>): Promise<T | null> {
+    return this.model.findByIdAndUpdate(
+      { _id: id },
+      { ...obj } as UpdateQuery<T>,
+      { new: true },
+    );
+  }
 } 
