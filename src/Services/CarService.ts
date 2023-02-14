@@ -1,5 +1,3 @@
-import { isValidObjectId } from 'mongoose';
-
 import Car from '../Domains/Car';
 import ICar from '../Interfaces/ICar';
 import CarODM from '../Models/CarODM';
@@ -25,21 +23,17 @@ export default class CarService {
   }
 
   public async findById(id: string) {
-    if (!isValidObjectId(id)) return { status: 422, data: { message: 'Invalid mongo id' } };
-
     const car = await this._model.findById(id);
 
-    if (!car) return { status: 404, data: { message: 'Car not found' } };
+    if (!car) throw Error('Car not found');
 
     return { status: 200, data: this.createCarDomain(car) };
   }
 
   public async update(id: string, updatedCar: ICar) {
-    if (!isValidObjectId(id)) return { status: 422, data: { message: 'Invalid mongo id' } };
-
     const car = await this._model.update(id, updatedCar);
 
-    if (!car) return { status: 404, data: { message: 'Car not found' } };
+    if (!car) throw Error('Car not found');
 
     return { status: 200, data: this.createCarDomain(car) };
   }

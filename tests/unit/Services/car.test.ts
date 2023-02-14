@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Model } from 'mongoose';
 import CarService from '../../../src/Services/CarService';
-import { newCarInput, carOutput } from './mocks/carMocks';
+import { newCarInput, carOutput, updatedCarInput } from './mocks/carMocks';
 
 describe('Tests for car services layer', function () {
   beforeEach(function () {
@@ -43,20 +43,24 @@ describe('Tests for car services layer', function () {
 
     sinon.stub(Model, 'findById').resolves(null);
 
-    const service = new CarService();
-    const result = await service.findById(id);
-
-    expect(result).to.be.deep.equal({ status: 404, data: { message: 'Car not found' } });
+    try {
+      const service = new CarService();
+      await service.findById(id);
+    } catch (error) {
+      expect((error as Error).message).to.be.equal('Car not found');
+    }
   });
   
-  it('should return a message if the id is invalid', async function () {
-    const id = 'jooiais';
+  it('should return a message if no car is found while updating', async function () {
+    const id = '63eaba30606194e5da44c9b2';
 
-    sinon.stub(Model, 'findById').resolves(null);
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(null);
 
-    const service = new CarService();
-    const result = await service.findById(id);
-
-    expect(result).to.be.deep.equal({ status: 422, data: { message: 'Invalid mongo id' } });
+    try {
+      const service = new CarService();
+      await service.update(id, updatedCarInput);
+    } catch (error) {
+      expect((error as Error).message).to.be.equal('Car not found');
+    }
   });
 });
