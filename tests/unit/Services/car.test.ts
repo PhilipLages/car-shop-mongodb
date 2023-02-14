@@ -2,9 +2,9 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Model } from 'mongoose';
 import CarService from '../../../src/Services/CarService';
-import { newCarInput, carOutput } from './mocks';
+import { newCarInput, carOutput } from './mocks/carMocks';
 
-describe('Tests for car services', function () {
+describe('Tests for car services layer', function () {
   beforeEach(function () {
     sinon.stub(Model, 'create').resolves(carOutput);
   });
